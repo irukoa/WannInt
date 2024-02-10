@@ -1,4 +1,5 @@
 [![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10644791.svg)](https://doi.org/10.5281/zenodo.10644791)
 [![Testing suite](https://github.com/irukoa/WannInt/actions/workflows/CI.yml/badge.svg)](https://github.com/irukoa/WannInt/actions/workflows/CI.yml)
 # WannInt
 ### Wannier Interpolation

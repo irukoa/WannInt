@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: WannInt
+message: Wannier Interpolation
+type: software
+authors:
+  - given-names: Álvaro
+    family-names: R. Puente-Uriona
+    email: alvaro.ruiz@ehu.eus
+    affiliation: UPV/EHU
+    orcid: 'https://orcid.org/0000-0003-1915-8804'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.10644791
+    description: Zenodo
+repository-code: 'https://github.com/irukoa/WannInt'
+url: 'https://github.com/irukoa/WannInt'
+abstract: >-
+  Wannier Interpolation. A Fortran library with utilities
+  to compute the resolution of quantum mechanical 
+  operators in the Brillouin zone of a crystal.
+keywords:
+  - Fortran
+  - Wannier Interpolation
+  - Generic programming
+license: GPL-3.0

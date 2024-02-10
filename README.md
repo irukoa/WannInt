@@ -26,7 +26,7 @@ in the WANNIER90 file input card.
 
 # Dependencies
 
-This library uses [MAC](https://github.com/irukoa/MAC)'s containers when storing the result of the Hamiltonian and Berry connection when derivatives are requested.
+This library uses [MAC](https://github.com/irukoa/MAC)'s containers to store the result of the Hamiltonian and Berry connection calculations when derivatives are requested.
 
 # API
 
@@ -59,7 +59,7 @@ call Cr%construct(name, &
 where
 
 - `character(len=*), intent(in) :: name` is the name of the crystal.
-- `real(dp), intent(in) :: direct_lattice_basis(3, 3)` is the basis of the Bravais lattice in $\text{\r{A}}$. The first index represents the vector label and the second is the vector component such that `direct_lattice_basis(i, :)` is the Bravais lattice vector $\textbf{a}_i$.
+- `real(dp), intent(in) :: direct_lattice_basis(3, 3)` is the basis of the Bravais lattice in $\text{A}$. The first index represents the vector label and the second is the vector component such that `direct_lattice_basis(i, :)` is the Bravais lattice vector $\textbf{a}_i$.
 - `integer, intent(in) :: num_bands` is the number of bands in the crystalline system.
 - `integer, intent(in) :: R_points(num_r_points, 3)` represents the set of direct lattice points to be included in the sums $\sum_{\textbf{R}}$ in terms of the Bravais lattice basis vectors. `R_points(i, :)` is identified with the integers $(c^i_1, c^i_2, c^i_3)$ such that
 
@@ -68,7 +68,7 @@ $$
 $$
 
 - `complex(dp), intent(in) :: tunnellings(num_r_points, num_bands, num_bands)` represents the Hamiltonian operator's matrix elements $H_{nm}(\textbf{R})$ in $\text{eV}$. The first index identifies $\textbf{R}$ and the second and third $n, m$, respectively.
-- `complex(dp), intent(in) :: dipoles(num_r_points, num_bands, num_bands, 3)` represents the Berry connection's matrix elements $A^j_{nm}(\textbf{R})$ in $\text{\r{A}}$. The first index identifies $\textbf{R}$, the second and third $n, m$, respectively and the forth the cartesian component $j$.
+- `complex(dp), intent(in) :: dipoles(num_r_points, num_bands, num_bands, 3)` represents the Berry connection's matrix elements $A^j_{nm}(\textbf{R})$ in $\text{A}$. The first index identifies $\textbf{R}$, the second and third $n, m$, respectively and the forth the cartesian component $j$.
 - `real(dp), optional, intent(in) :: fermi_energy` represents the crystal's Fermi energy in $\text{eV}$.
 - `character(len=*), intent(in) :: from_file` is the path of a WANNIER90 format tight-binding file, relative to the program's execution directory. The Bravais lattice basis, the number of bands, the number of Bravais lattice points, their coordinates and the matrix elements of the Hamiltonian and Berry connection will be read from file.
 
@@ -94,7 +94,7 @@ Is called as,
 direct_lattice_basis = Cr%direct_lattice_basis()
 ```
 
-where `real(dp) :: direct_lattice_basis(3, 3)` is the direct lattice basis given in the constructor in $\text{\r{A}}$..
+where `real(dp) :: direct_lattice_basis(3, 3)` is the direct lattice basis given in the constructor in $\text{A}$.
 
 #### Reciprocal lattice basis
 
@@ -104,7 +104,7 @@ Is called as,
 reciprocal_lattice_basis = Cr%reciprocal_lattice_basis()
 ```
 
-where `real(dp) :: reciprocal_lattice_basis(3, 3)` is the reciprocal lattice basis in $\text{\r{A}}^{-1}$. It obeys `dot_product(reciprocal_lattice_basis(i, :), direct_lattice_basis(j, :))` $=2\pi \delta_{ij}$.
+where `real(dp) :: reciprocal_lattice_basis(3, 3)` is the reciprocal lattice basis in $\text{A}^{-1}$. It obeys `dot_product(reciprocal_lattice_basis(i, :), direct_lattice_basis(j, :))` $=2\pi \delta_{ij}$.
 
 #### Metric tensor
 
@@ -114,7 +114,7 @@ Is called as,
 metric_tensor = Cr%metric_tensor()
 ```
 
-where `real(dp) :: metric_tensor(3, 3)` is the metric tensor in in $\text{\r{A}}^2$. It obeys `metric_tensor(3, 3) = dot_product(direct_lattice_basis(i, :), direct_lattice_basis(j, :))`.
+where `real(dp) :: metric_tensor(3, 3)` is the metric tensor in in $\text{A}^2$. It obeys `metric_tensor(3, 3) = dot_product(direct_lattice_basis(i, :), direct_lattice_basis(j, :))`.
 
 #### Cell volume
 
@@ -124,7 +124,7 @@ Is called as,
 cell_volume = Cr%cell_volume()
 ```
 
-where `real(dp) :: cell_volume` is the cell volume in $\text{\r{A}}$.
+where `real(dp) :: cell_volume` is the cell volume in $\text{A}$.
 
 #### Number of bands
 
@@ -184,7 +184,7 @@ Is called as,
 berry_conn = Cr%get_real_space_position_elements()
 ```
 
-where `complex(dp) :: berry_conn(Cr%nrpts(), Cr%num_bands(), Cr%num_bands(), 3)` is $A^j_{nm}(\textbf{R})$ in $\text{\r{A}}$.
+where `complex(dp) :: berry_conn(Cr%nrpts(), Cr%num_bands(), Cr%num_bands(), 3)` is $A^j_{nm}(\textbf{R})$ in $\text{A}$.
 
 #### Fermi energy.
 
@@ -214,7 +214,7 @@ $$
 H_{nm}^{lp\cdots }(\textbf{k}) = \sum_{\textbf{R}}\left[\left(iR^l\right)\left(iR^p\right)\cdots\right] e^{i\textbf{k}\cdot \textbf{R}}H_{nm}(\textbf{R}),
 $$
 
-in $\text{eV}$ and is called as
+in $\text{eV} \cdot (\text{A}^{d})$, where $d$ is the derivative order and is called as
 
 ```fortran
 H = Cr%hamiltonian(kpt [, derivative, all])
@@ -226,9 +226,9 @@ where
 - `logical, optional, intent(in) :: all` if present and true, all the derivatives of the Hamiltonian from 0 up to derivative are computed.
 - `H` is the output value.
   - If `derivative` and `all` are not present, `H` is `complex(dp) :: H(Cr%num_bands(), Cr%num_bands())` and represents the Hamiltonian $H_{nm}(\textbf{k})$.
-  - If `derivative = n` is present and `all` is not present, `H` is MAC's `complex_dp` `type(container) :: H` and stores the Hamiltonians $n$th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. 
-  - If `derivative = n` is present and `all` is present and `true`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in each index, the Hamiltonians $n$th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. Each container `H(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. The Hamiltonian (no derivative) is stored in `H(1)`.
-  - If `derivative = n` is present and `all` is present and `false`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in the first index if the container, the Hamiltonians $n$th derivative.
+  - If `derivative = n` is present and `all` is not present, `H` is MAC's `complex_dp` `type(container) :: H` and stores the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. 
+  - If `derivative = n` is present and `all` is present and `true`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in each index, the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. Each container `H(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. The Hamiltonian (no derivative) is stored in `H(1)`.
+  - If `derivative = n` is present and `all` is present and `false`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in the first index if the container, the Hamiltonians $n$ th derivative.
 
 ### Berry connection.
 
@@ -238,7 +238,7 @@ $$
 A_{nm}^{j \ lp\cdots }(\textbf{k}) = \sum_{\textbf{R}}\left[\left(iR^l\right)\left(iR^p\right)\cdots\right] e^{i\textbf{k}\cdot \textbf{R}}A^j_{nm}(\textbf{R}).
 $$
 
-in $\text{\r{A}}$ and is called as
+in $\text{A} \cdot (\text{A}^{d})$, where $d$ is the derivative order and is called as
 
 ```fortran
 A = Cr%berry_connection(kpt [, derivative, all])
@@ -250,9 +250,9 @@ where
 - `logical, optional, intent(in) :: all` if present and true, all the derivatives of the Berry connection from 0 up to derivative are computed.
 - `A` is the output value.
   - If `derivative` and `all` are not present, `A` is `complex(dp) :: H(Cr%num_bands(), Cr%num_bands(), 3)` and represents the Berry connection $A_{nm}^{j}(\textbf{k})$.
-  - If `derivative = n` is present and `all` is not present, `A` is MAC's `complex_dp` `type(container) :: A` and stores the Berry connection $n$th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. 
-  - If `derivative = n` is present and `all` is present and `true`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in each index, the Berry connection's $n$th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. Each container `A(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. The Berry connection (no derivative) is stored in `A(1)`.
-  - If `derivative = n` is present and `all` is present and `false`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in the first index if the container, the Berry connection's $n$th derivative.
+  - If `derivative = n` is present and `all` is not present, `A` is MAC's `complex_dp` `type(container) :: A` and stores the Berry connection $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. 
+  - If `derivative = n` is present and `all` is present and `true`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in each index, the Berry connection's $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. Each container `A(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. The Berry connection (no derivative) is stored in `A(1)`.
+  - If `derivative = n` is present and `all` is present and `false`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in the first index if the container, the Berry connection's $n$ th derivative.
 
 ## Diagonalization utility.
 
@@ -283,4 +283,4 @@ to the `fpm.toml` file.
 type, public :: container_specifier
 type, extends(container_specifier), public :: container
 ```
-are made public already by WannInt.
+are made public by WannInt.

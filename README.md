@@ -275,7 +275,7 @@ An automated build is available for [Fortran Package Manager](https://fpm.fortra
 
 ```
 [dependencies]
-MAC = { git="https://github.com/irukoa/WannInt.git" }
+WannInt = { git="https://github.com/irukoa/WannInt.git" }
 ```
 to the `fpm.toml` file.
 

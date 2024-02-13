@@ -2,13 +2,16 @@ program Randomized
   use iso_fortran_env, only: error_unit
   use MAC, only: container
   use WannInt_kinds, only: wp => dp
+  use WannInt_definitions, only: cmplx_1
   use WannInt, only: crystal
 
   implicit none
 
-  integer, parameter :: minbnd = 20, maxbnd = 300, &
-                        minnr = 500, maxnr = 3000, &
-                        minder = 1, maxder = 10
+  integer, parameter :: minbnd = 20, maxbnd = 200, &
+                        minnr = 500, maxnr = 2000, &
+                        minder = 1, maxder = 6
+
+  real(wp), parameter :: tol = 1.0E2_wp
 
   real(wp) :: rnd, &
               rnbnd, rnr, rnder
@@ -108,6 +111,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -118,6 +124,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     alloc_container_res = dummy%hamiltonian(kpt=[0.0_wp, 0.0_wp, 0.0_wp], derivative=nder, all=.true.)
+    if (abs(abs(alloc_container_res(1)%cdp_storage(1))/real(dummy%nrpts()) - 1.0_wp) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_h_b1
 
@@ -139,6 +147,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -149,6 +160,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     contained_res = dummy%hamiltonian(kpt=[0.0_wp, 0.0_wp, 0.0_wp], derivative=nder)
+    if (abs(abs(contained_res%cdp_storage(1))/real(dummy%nrpts())) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_h_b2
 
@@ -170,6 +183,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -180,6 +196,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     resH = dummy%hamiltonian(kpt=[0.0_wp, 0.0_wp, 0.0_wp])
+    if(abs(abs(resH(1, 1))/real(dummy%nrpts()) - 1.0_wp) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_h_b3
 
@@ -201,6 +219,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -211,6 +232,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     alloc_container_res = dummy%berry_connection(kpt=[0.0_wp, 0.0_wp, 0.0_wp], derivative=nder, all=.true.)
+    if(abs(abs(alloc_container_res(1)%cdp_storage(1))/real(dummy%nrpts()) - 1.0_wp) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_a_b1
 
@@ -232,6 +255,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -242,6 +268,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     contained_res = dummy%berry_connection(kpt=[0.0_wp, 0.0_wp, 0.0_wp], derivative=nder)
+    if(abs(abs(contained_res%cdp_storage(1))/real(dummy%nrpts())) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_a_b2
 
@@ -263,6 +291,9 @@ contains
     dlb(2, :) = [0.0_wp, 1.0_wp, 0.0_wp]
     dlb(3, :) = [0.0_wp, 0.0_wp, 1.0_wp]
 
+    tunnellings = cmplx_1
+    dipoles = cmplx_1
+
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
                          num_bands=nbnd, &
@@ -273,6 +304,8 @@ contains
 
     write (error_unit, fmt="(A)") "All variables allocated."
     resA = dummy%berry_connection(kpt=[0.0_wp, 0.0_wp, 0.0_wp])
+    if(abs(abs(resA(1, 1, 1))/real(dummy%nrpts()) - 1.0_wp) > tol*epsilon(1.0_wp)) &
+    error stop "Mismatch with reference."
 
   end subroutine random_exec_a_b3
 

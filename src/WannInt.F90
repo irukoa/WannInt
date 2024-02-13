@@ -143,14 +143,14 @@ contains
 
     self%num_R_points = size(R_points(:, 1))
 
-    allocate (self%R_points(self%num_R_points, 3), &
+    allocate (self%R_points(3, self%num_R_points), &
               self%deg_R_points(self%num_R_points), stat=istat)
     if (istat /= 0) then
       write (errormsg, "(i20)") istat
       errormsg = "WannInt: Error #5: failure allocating R_points and deg_R_points. stat = "//trim(adjustl(errormsg))//"."
       error stop trim(errormsg)
     endif
-    self%R_points = R_points
+    self%R_points = transpose(R_points)
     self%deg_R_points = 1
 
     allocate (self%real_space_hamiltonian_elements(self%num_R_points, self%bands, self%bands), &
@@ -237,7 +237,7 @@ contains
 
     read (unit=stdin, fmt=*) self%num_R_points
 
-    allocate (self%R_points(self%num_R_points, 3), &
+    allocate (self%R_points(3, self%num_R_points), &
               self%deg_R_points(self%num_R_points), stat=istat)
     if (istat /= 0) then
       write (errormsg, "(i20)") istat
@@ -279,7 +279,7 @@ contains
     endif
     self%real_space_hamiltonian_elements = cmplx_0
     do irpts = 1, self%num_R_points
-      read (unit=stdin, fmt=*) (self%R_points(irpts, i), i=1, 3)
+      read (unit=stdin, fmt=*) (self%R_points(i, irpts), i=1, 3)
       do i = 1, self%bands
         do j = 1, self%bands
           read (unit=stdin, fmt=*) dummy1, dummy2, dummyR(1), dummyR(2)
@@ -386,7 +386,7 @@ contains
     integer :: rpts(self%num_R_points, 3)
     if (.not. (self%is_initialized)) error stop &
       "WannInt: Error #6: crystal is not initialized."
-    rpts = self%R_points
+    rpts = transpose(self%R_points)
   end function rpts
 
   pure function deg_rpts(self)
@@ -546,12 +546,12 @@ contains
 
         !Compute factor appearing in the exponential.
         !(k is in coords relative to recip. lattice vectors).
-        kdotr = 2.0_wp*pi*dot_product(self%R_points(irpts, :), k)
+        kdotr = 2.0_wp*pi*dot_product(self%R_points(:, irpts), k)
 
         !Compute Bravais lattice vector for label irpts.
         vec = 0.0_wp
         do i = 1, 3
-          vec = vec + self%R_points(irpts, i)*self%direct_l_b(i, :)
+          vec = vec + self%R_points(i, irpts)*self%direct_l_b(i, :)
         enddo
 
         prod_r = 1.0_wp
@@ -694,12 +694,12 @@ contains
 
         !Compute factor appearing in the exponential.
         !(k is in coords relative to recip. lattice vectors).
-        kdotr = 2.0_wp*pi*dot_product(self%R_points(irpts, :), k)
+        kdotr = 2.0_wp*pi*dot_product(self%R_points(:, irpts), k)
 
         !Compute Bravais lattice vector for label irpts.
         vec = 0.0_wp
         do i = 1, 3
-          vec = vec + self%R_points(irpts, i)*self%direct_l_b(i, :)
+          vec = vec + self%R_points(i, irpts)*self%direct_l_b(i, :)
         enddo
 
         prod_r = 1.0_wp

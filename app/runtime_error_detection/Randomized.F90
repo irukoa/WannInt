@@ -149,6 +149,7 @@ contains
 
     tunnellings = cmplx_1
     dipoles = cmplx_1
+    rpts = 0
 
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &
@@ -257,6 +258,7 @@ contains
 
     tunnellings = cmplx_1
     dipoles = cmplx_1
+    rpts = 0
 
     call dummy%construct(name="dummy", &
                          direct_lattice_basis=dlb, &

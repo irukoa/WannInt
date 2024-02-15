@@ -280,7 +280,7 @@ dl = deg_list(eig, degen_thr)
 where
 - `real(dp), intent(in) :: eig(n)` is a list of $n$ eigenvalues $\varepsilon_i$ of an Hermitian operator sorted in ascending order.
 - `real(dp), intent(in) :: degen_thr` is a degeneracy threshold $\lambda$ such that two eigenvalues $i, j$ obeying $|\varepsilon_i- \varepsilon_j| < \lambda$ will be considered degenerate.
-- `integer :: dl(n)` is a list of $n$ numbers expressing the dimensionality of each subspace. If `dl(i) = M`, then $\varepsilon_i = \varepsilon_{i+1} = \cdots = \varepsilon_{i + N - 1}$ up to $\lambda$. If $i < j < i + N - 1$, then `dl(j) = 0`. If the value is nondegenerate, then `dl(j) = 1`.
+- `integer :: dl(n)` is a list of $n$ numbers expressing the dimensionality of each subspace. If `dl(i) = M`, then $\varepsilon_i = \varepsilon_{i+1} = \cdots = \varepsilon_{i + M - 1}$ up to $\lambda$. If $i < j < i + M - 1$, then `dl(j) = 0`. If the value is nondegenerate, then `dl(j) = 1`.
 
 ## Diagonalization utility.
 

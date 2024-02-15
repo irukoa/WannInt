@@ -4,6 +4,7 @@ program driver
   & select_suite, run_selected, get_argument
   !Tests:
   use Basic_Suite, only: Collect_Basic_Tests
+  use Extra_Utilities_Suite, only: Collect_Extra_Utilities_Tests
   use Basic_Interpolation_Suite, only: Collect_Basic_Interpolation_Tests
   use Material_Property_Interpolation_Suite, only: Collect_Material_Property_Interpolation_Tests
   use Tough_Randomized_Suite, only: Collect_Tough_Randomized_Tests
@@ -17,6 +18,7 @@ program driver
   stat = 0
 
   testsuites = [new_testsuite("Basic Tests", Collect_Basic_Tests), &
+                new_testsuite("Extra Utilities Tests", Collect_Extra_Utilities_Tests), &
                 new_testsuite("Basic Interpolation Tests", Collect_Basic_Interpolation_Tests), &
                 new_testsuite("Material Property Interpolation Tests", Collect_Material_Property_Interpolation_Tests), &
                 new_testsuite("Stress and Randomized Tests", Collect_Tough_Randomized_Tests)]

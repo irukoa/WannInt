@@ -255,6 +255,33 @@ where
   - If `derivative = n` is present and `all` is present and `true`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in each index, the Berry connection's $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. Each container `A(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. The Berry connection (no derivative) is stored in `A(1)`.
   - If `derivative = n` is present and `all` is present and `false`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in the first index if the container, the Berry connection's $n$ th derivative.
 
+## Dirac delta utility.
+
+The library includes an approximation of a Dirac delta as a narrow Gaussian,
+
+$$
+\delta(x) \approx \frac{1}{\sigma\sqrt{2\pi}}e^{-x^2/(2\sigma^2)}.
+$$
+
+It can be called by
+```fortran
+delta = dirac_delta(x, smr)
+```
+where
+- `real(dp), intent(in)  :: x, smr` are the evaluation point $x$ and smearing $\sigma$, respectively.
+- `real(dp) :: delta` is an approximation to $\delta(x)$.
+  
+## Subspace degeneracy calculator
+
+The library includes a utility to calculate the degeneracy of subspaces. It can be called by
+```fortran
+dl = deg_list(eig, degen_thr)
+```
+where
+- `real(dp), intent(in) :: eig(n)` is a list of $n$ eigenvalues $\varepsilon_i$ of an Hermitian operator sorted in ascending order.
+- `real(dp), intent(in) :: degen_thr` is a degeneracy threshold $\lambda$ such that two eigenvalues $i, j$ obeying $|\varepsilon_i- \varepsilon_j| < \lambda$ will be considered degenerate.
+- `integer :: dl(n)` is a list of $n$ numbers expressing the dimensionality of each subspace. If `dl(i) = M`, then $\varepsilon_i = \varepsilon_{i+1} = \cdots = \varepsilon_{i + N - 1}$ up to $\lambda$. If $i < j < i + N - 1$, then `dl(j) = 0`. If the value is nondegenerate, then `dl(j) = 1`.
+
 ## Diagonalization utility.
 
 The library includes a wrapper of `dsyev` and `zheev` routines from LAPACK. It can be called by
@@ -268,6 +295,49 @@ where
 - `real/complex(dp), intent(out) :: P(n, n)` is an orthogonal/unitary matrix such that $D = P^{-1}MP$ is diagonal, $M$ being `matrix`.
 - `real/complex(dp), optional, intent(out) :: D(n, n)` is the diagonal form $D$ of `matrix`.
 - `real(dp), optional, intent(out) :: eig(n)` are the eigenvalues of `matrix`.
+
+## Schur decomposition utility.
+
+The library includes a wrapper of `zgees` routine from LAPACK. It can be called by
+
+```fortran
+call schur(matrix, Z [, S, T])
+```
+where
+
+- `complex(dp), intent(in)  :: matrix(n, n)` is a square matrix.
+- `complex(dp), intent(out) :: Z(n, n)` is a unitary matrix such that $S = Z^{-1}MZ$ is upper-triangular, $M$ being `matrix`.
+- `complex(dp), optional, intent(out) :: S(n, n)` is the upper-triangular form $S$ of `matrix`.
+- `complex(dp), optional, intent(out) :: T(n)` are the diagonal entries of `S`.
+
+## Singular value decomposition utility.
+
+The library includes a wrapper of `zgesvd` routine from LAPACK. It can be called by
+
+```fortran
+call SVD(matrix, U, V [, sigma, eig])
+```
+where
+
+- `complex(dp), intent(in)  :: matrix(m, n)` is a matrix.
+- `complex(dp), intent(out) :: U(m, m), V(n, n)` are unitary matrices such that $\Sigma = U^{-1}MV$ is diagonal, $M$ being `matrix`.
+- `real/complex(dp), optional, intent(out) :: sigma(m, n)` is the diagonal form $\Sigma$ of `matrix`.
+- `real(dp), optional, intent(out) :: eig(n)` are the diagonal entries of `sigma`.
+
+## Matrix exponential and logarithm utilities.
+
+The library includes tools to compute the exponential of a skew-Hermitian matrix and the logarithm of a unitary matrix, `expsh` and `logu`, respectively. These can be called by
+
+```fortran
+E = expsh(SH)
+L = logu(U)
+```
+where
+
+- `complex(dp), intent(in)  :: SH(n, n)` is a skew-Hermitian ($SH^{\dagger} = -SH$) matrix.
+- `complex(dp) :: E(n, n)` is a unitary matrix such that $E = e^{SH}$.
+- `complex(dp), intent(in)  :: U(n, n)` is a unitary matrix.
+- `complex(dp) :: L(n, n)` is a skew-Hermitian matrix such that $L = \text{log}(U)$.
 
 # Build
 

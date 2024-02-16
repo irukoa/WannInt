@@ -38,7 +38,7 @@ type, public :: crystal
 is defined.
 
 ## `type(crystal) :: Cr`
-### Constructor.
+### Constructor
 
 A crystal is initialized by calling (first way)
 
@@ -73,7 +73,7 @@ $$
 - `real(dp), optional, intent(in) :: fermi_energy` represents the crystal's Fermi energy in $\text{eV}$.
 - `character(len=*), intent(in) :: from_file` is the path of a WANNIER90 format tight-binding file, relative to the program's execution directory. The Bravais lattice basis, the number of bands, the number of Bravais lattice points, their coordinates and the matrix elements of the Hamiltonian and Berry connection will be read from file.
 
-### Handles.
+### Handles
 
 These routines retrieve crystal's properties.
 
@@ -167,7 +167,7 @@ deg_rpts = Cr%deg_rpts()
 
 where `integer :: deg_rpts(Cr%nrpts())` is the set degeneracies for each of $\textbf{R}$ points that are included in the sums $\sum_{\textbf{R}}$. For crystals constructed from input, the array is a constant 1, but for real materials constructed from file, it stores the number of sites that are equivalent.
 
-#### Hamiltonian matrix elements.
+#### Hamiltonian matrix elements
 
 Is called as,
 
@@ -177,7 +177,7 @@ hamiltonian_elements = Cr%get_real_space_hamiltonian_elements()
 
 where `complex(dp) :: hamiltonian_elements(Cr%nrpts(), Cr%num_bands(), Cr%num_bands())` is $H_{nm}(\textbf{R})$ in $\text{eV}$.
 
-#### Berry connection matrix elements.
+#### Berry connection matrix elements
 
 Is called as,
 
@@ -187,7 +187,7 @@ berry_conn = Cr%get_real_space_position_elements()
 
 where `complex(dp) :: berry_conn(Cr%nrpts(), Cr%num_bands(), Cr%num_bands(), 3)` is $A^j_{nm}(\textbf{R})$ in $\text{A}$.
 
-#### Fermi energy.
+#### Initialization query
 
 Is called as,
 
@@ -197,7 +197,7 @@ initialized = Cr%initialized()
 
 where `logical :: initialized` is `.true.` if the crystal has been initialized and `.false.` otherwise.
 
-#### Initialization query.
+#### Fermi energy
 
 Is called as,
 
@@ -207,7 +207,7 @@ fermi_energy = Cr%fermi_energy()
 
 where `real(dp) :: fermi_energy` is the Fermi energy in $\text{eV}$.
 
-### Hamiltonian.
+### Hamiltonian
 
 Implements
 
@@ -231,7 +231,7 @@ where
   - If `derivative = n` is present and `all` is present and `true`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in each index, the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. Each container `H(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. The Hamiltonian (no derivative) is stored in `H(1)`.
   - If `derivative = n` is present and `all` is present and `false`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in the first index if the container, the Hamiltonians $n$ th derivative.
 
-### Berry connection.
+### Berry connection
 
 Implements
 
@@ -255,7 +255,7 @@ where
   - If `derivative = n` is present and `all` is present and `true`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in each index, the Berry connection's $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. Each container `A(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. The Berry connection (no derivative) is stored in `A(1)`.
   - If `derivative = n` is present and `all` is present and `false`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in the first index if the container, the Berry connection's $n$ th derivative.
 
-## Dirac delta utility.
+## Dirac delta utility
 
 The library includes an approximation of a Dirac delta as a narrow Gaussian,
 
@@ -282,7 +282,7 @@ where
 - `real(dp), intent(in) :: degen_thr` is a degeneracy threshold $\lambda$ such that two eigenvalues $i, j$ obeying $|\varepsilon_i- \varepsilon_j| < \lambda$ will be considered degenerate.
 - `integer :: dl(n)` is a list of $n$ numbers expressing the dimensionality of each subspace. If `dl(i) = M`, then $\varepsilon_i = \varepsilon_{i+1} = \cdots = \varepsilon_{i + M - 1}$ up to $\lambda$. If $i < j < i + M - 1$, then `dl(j) = 0`. If the value is nondegenerate, then `dl(j) = 1`.
 
-## Diagonalization utility.
+## Diagonalization utility
 
 The library includes a wrapper of `dsyev` and `zheev` routines from LAPACK. It can be called by
 
@@ -296,7 +296,7 @@ where
 - `real/complex(dp), optional, intent(out) :: D(n, n)` is the diagonal form $D$ of `matrix`.
 - `real(dp), optional, intent(out) :: eig(n)` are the eigenvalues of `matrix`.
 
-## Schur decomposition utility.
+## Schur decomposition utility
 
 The library includes a wrapper of `zgees` routine from LAPACK. It can be called by
 
@@ -310,7 +310,7 @@ where
 - `complex(dp), optional, intent(out) :: S(n, n)` is the upper-triangular form $S$ of `matrix`.
 - `complex(dp), optional, intent(out) :: T(n)` are the diagonal entries of `S`.
 
-## Singular value decomposition utility.
+## Singular value decomposition utility
 
 The library includes a wrapper of `zgesvd` routine from LAPACK. It can be called by
 
@@ -324,7 +324,7 @@ where
 - `real/complex(dp), optional, intent(out) :: sigma(m, n)` is the diagonal form $\Sigma$ of `matrix`.
 - `real(dp), optional, intent(out) :: eig(n)` are the diagonal entries of `sigma`.
 
-## Matrix exponential and logarithm utilities.
+## Matrix exponential and logarithm utilities
 
 The library includes tools to compute the exponential of a skew-Hermitian matrix and the logarithm of a unitary matrix, `expsh` and `logu`, respectively. These can be called by
 

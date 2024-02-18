@@ -6,8 +6,8 @@ module WannInt
   use WannInt_kinds, only: wp => dp
   use WannInt_definitions, only: cmplx_0, cmplx_i, pi
   use WannInt_utilities, only: diagonalize, dirac_delta, &
-                               deg_list, schur, &
-                               SVD, expsh, logu
+    deg_list, schur, &
+    SVD, expsh, logu
   use MAC, only: container_specifier, container
 
   implicit none

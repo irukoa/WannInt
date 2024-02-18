@@ -2,8 +2,8 @@ module Extra_Utilities_Suite
   use WannInt_kinds, only: wp => dp
   use WannInt_definitions, only: cmplx_i, pi
   use WannInt_utilities, only: diagonalize, &
-                               dirac_delta, deg_list, &
-                               schur, SVD, expsh, logu
+    dirac_delta, deg_list, &
+    schur, SVD, expsh, logu
   use WannInt, only: crystal
   use testdrive, only: new_unittest, unittest_type, error_type
   implicit none
@@ -33,7 +33,7 @@ contains
     x = 0.01_wp
     smr = 0.1_wp
 
-    if(abs(dirac_delta(x, smr) - 3.9695254747701179_wp)>tol*epsilon(1.0_wp)) then
+    if (abs(dirac_delta(x, smr) - 3.9695254747701179_wp) > tol*epsilon(1.0_wp)) then
       allocate (error)
       return
     endif
@@ -64,14 +64,14 @@ contains
     call diagonalize(matrix=H, P=R, eig=eig)
 
     dg_lts = deg_list(eig, 0.0001_wp)
-    if(dg_lts(2)/=3) then
+    if (dg_lts(2) /= 3) then
       allocate (error)
       return
     endif
 
     eig = 0.0_wp
     dg_lts = deg_list(eig, 0.0001_wp)
-    if(dg_lts(1)/=Si%num_bands()) then
+    if (dg_lts(1) /= Si%num_bands()) then
       allocate (error)
       return
     endif
@@ -97,9 +97,9 @@ contains
 
     matches = 0
     do i = 1, 3
-      if(abs(eig(i)) < tol*epsilon(1.0_wp)) matches = matches + 1
+      if (abs(eig(i)) < tol*epsilon(1.0_wp)) matches = matches + 1
     enddo
-    if(matches /= 1) then
+    if (matches /= 1) then
       allocate (error)
       return
     endif
@@ -118,37 +118,35 @@ contains
     call random_seed()
     call random_number(nr)
 
-    n = nint(2.0_wp + 28.0_wp * nr)
+    n = nint(2.0_wp + 28.0_wp*nr)
     n = 30
 
-    allocate(rnd1(n, n), rnd2(n, n), eig(n), m(n, n), res(n, n), p(n, n))
+    allocate (rnd1(n, n), rnd2(n, n), eig(n), m(n, n), res(n, n), p(n, n))
 
     call random_number(rnd1)
-    rnd1 = 1.0_wp + 9.0_wp * rnd1
+    rnd1 = 1.0_wp + 9.0_wp*rnd1
     call random_number(rnd2)
-    rnd2 = 1.0_wp + 9.0_wp * rnd2
+    rnd2 = 1.0_wp + 9.0_wp*rnd2
 
     m = cmplx(rnd1, rnd2, wp)
     m = (m - conjg(transpose(m)))/2.0_wp
-    call diagonalize(matrix = cmplx_i*m, P = p, eig = eig)
+    call diagonalize(matrix=cmplx_i*m, P=p, eig=eig)
     sv = eig(1)
 
-    res = logu(matrix = expsh(matrix = m))
-    call diagonalize(matrix = cmplx_i*res, P = p, eig = eig)
+    res = logu(matrix=expsh(matrix=m))
+    call diagonalize(matrix=cmplx_i*res, P=p, eig=eig)
 
     matches = 0
     do i = 1, n
-      if(abs(aimag(log(exp(cmplx_i*sv))) - eig(i))< 1.0E-5_wp) matches = matches + 1
+      if (abs(aimag(log(exp(cmplx_i*sv))) - eig(i)) < 1.0E-5_wp) matches = matches + 1
     enddo
-    if(matches < 1) then
+    if (matches < 1) then
       allocate (error)
       return
     endif
 
-    deallocate(rnd1, rnd2, eig, m, res, p)
+    deallocate (rnd1, rnd2, eig, m, res, p)
 
   end subroutine test_exp_and_log
-
-
 
 end module Extra_Utilities_Suite

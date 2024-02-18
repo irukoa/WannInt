@@ -227,7 +227,7 @@ where
 - `logical, optional, intent(in) :: all` if present and true, all the derivatives of the Hamiltonian from 0 up to derivative are computed.
 - `H` is the output value.
   - If `derivative` and `all` are not present, `H` is `complex(dp) :: H(Cr%num_bands(), Cr%num_bands())` and represents the Hamiltonian $H_{nm}(\textbf{k})$.
-  - If `derivative = n` is present and `all` is not present, `H` is MAC's `complex_dp` `type(container) :: H` and stores the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. 
+  - If `derivative = n` is present and `all` is not present, `H` is MAC's `complex_dp` `type(container) :: H` and stores the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$.
   - If `derivative = n` is present and `all` is present and `true`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in each index, the Hamiltonians $n$ th derivative $H_{nm}^{lp\cdots }(\textbf{k})$. Each container `H(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, ..., 3)` where the number of indices is $n + 2$. The Hamiltonian (no derivative) is stored in `H(1)`.
   - If `derivative = n` is present and `all` is present and `false`, `H` is MAC's `complex_dp` `type(container), allocatable :: H(:)` and stores, in the first index if the container, the Hamiltonians $n$ th derivative.
 
@@ -251,7 +251,7 @@ where
 - `logical, optional, intent(in) :: all` if present and true, all the derivatives of the Berry connection from 0 up to derivative are computed.
 - `A` is the output value.
   - If `derivative` and `all` are not present, `A` is `complex(dp) :: H(Cr%num_bands(), Cr%num_bands(), 3)` and represents the Berry connection $A_{nm}^{j}(\textbf{k})$.
-  - If `derivative = n` is present and `all` is not present, `A` is MAC's `complex_dp` `type(container) :: A` and stores the Berry connection $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. 
+  - If `derivative = n` is present and `all` is not present, `A` is MAC's `complex_dp` `type(container) :: A` and stores the Berry connection $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. The container represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$.
   - If `derivative = n` is present and `all` is present and `true`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in each index, the Berry connection's $n$ th derivative $A_{nm}^{j \ lp\cdots }(\textbf{k})$. Each container `A(i)` represents an array with shape `(Cr%num_bands(), Cr%num_bands(), 3, 3, ..., 3)` where the number of indices is $n + 3$. The Berry connection (no derivative) is stored in `A(1)`.
   - If `derivative = n` is present and `all` is present and `false`, `A` is MAC's `complex_dp` `type(container), allocatable :: A(:)` and stores, in the first index if the container, the Berry connection's $n$ th derivative.
 
@@ -270,7 +270,7 @@ delta = dirac_delta(x, smr)
 where
 - `real(dp), intent(in)  :: x, smr` are the evaluation point $x$ and smearing $\sigma$, respectively.
 - `real(dp) :: delta` is an approximation to $\delta(x)$.
-  
+
 ## Subspace degeneracy calculator
 
 The library includes a utility to calculate the degeneracy of subspaces. It can be called by

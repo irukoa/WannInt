@@ -16,7 +16,7 @@ repository-code: 'https://github.com/irukoa/WannInt'
 url: 'https://github.com/irukoa/WannInt'
 abstract: >-
   Wannier Interpolation. A Fortran library with utilities
-  to compute the resolution of quantum mechanical 
+  to compute the resolution of quantum mechanical
   operators in the Brillouin zone of a crystal.
 keywords:
   - Fortran

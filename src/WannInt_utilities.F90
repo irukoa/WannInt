@@ -2,7 +2,7 @@ module WannInt_utilities
 
   use WannInt_kinds, only: wp => dp
   use WannInt_definitions, only: cmplx_0, cmplx_1, cmplx_i, &
-                                 pi
+    pi
 
   implicit none
 
@@ -179,7 +179,7 @@ contains
     integer :: i, j, dim
 
     if (degen_thr < 0.0_wp) error stop &
-    "WannInt: Error #3: 'degen_thr' must be a positive real."
+      "WannInt: Error #3: 'degen_thr' must be a positive real."
 
     deg_list = 0
     dim = size(eig)
@@ -223,10 +223,10 @@ contains
     !==============================================!
 
     complex(wp), intent(in)  :: matrix(:, :)
-    complex(wp), intent(out) :: Z(size(matrix(:, 1)), size(matrix(1, :))) 
+    complex(wp), intent(out) :: Z(size(matrix(:, 1)), size(matrix(1, :)))
 
     complex(wp), optional, intent(out) :: S(size(matrix(:, 1)), size(matrix(1, :)))
-    complex(wp), optional, intent(out) :: T(size(matrix(:, 1)))     
+    complex(wp), optional, intent(out) :: T(size(matrix(:, 1)))
 
     complex(wp)              :: B(size(matrix(:, 1)), size(matrix(1, :)))
     complex(wp)              :: eig(size(matrix(:, 1)))
@@ -356,7 +356,7 @@ contains
 
     integer :: i
 
-    call diagonalize(matrix = -cmplx_i*matrix, P = P, D = D)
+    call diagonalize(matrix=-cmplx_i*matrix, P=P, D=D)
 
     do i = 1, size(matrix(:, 1))
       D(i, i) = exp(cmplx_i*D(i, i))
@@ -385,7 +385,7 @@ contains
 
     integer :: i
 
-    call schur(matrix = matrix, Z = Z, S = S)
+    call schur(matrix=matrix, Z=Z, S=S)
 
     do i = 1, size(matrix(:, 1))
       S(i, i) = log(S(i, i))

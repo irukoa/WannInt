@@ -321,7 +321,7 @@ where
 
 - `complex(dp), intent(in)  :: matrix(m, n)` is a matrix.
 - `complex(dp), intent(out) :: U(m, m), V(n, n)` are unitary matrices such that $\Sigma = U^{-1}MV$ is diagonal, $M$ being `matrix`.
-- `real/complex(dp), optional, intent(out) :: sigma(m, n)` is the diagonal form $\Sigma$ of `matrix`.
+- `complex(dp), optional, intent(out) :: sigma(m, n)` is the diagonal form $\Sigma$ of `matrix`.
 - `real(dp), optional, intent(out) :: eig(n)` are the diagonal entries of `sigma`.
 
 ## Matrix exponential and logarithm utilities
@@ -347,7 +347,7 @@ An automated build is available for [Fortran Package Manager](https://fpm.fortra
 [dependencies]
 WannInt = { git="https://github.com/irukoa/WannInt.git" }
 ```
-to the `fpm.toml` file.
+in the `fpm.toml` file.
 
 [MAC](https://github.com/irukoa/MAC)'s objects
 ``` fortran

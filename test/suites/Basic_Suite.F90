@@ -1,7 +1,7 @@
 module Basic_Suite
   use WannInt_kinds, only: wp => dp
   use WannInt_definitions, only: cmplx_0, cmplx_1
-  use WannInt_utilities, only: diagonalize
+  use WannInt_utilities, only: diagonalize, inverse
   use WannInt, only: crystal
   use testdrive, only: new_unittest, unittest_type, error_type
   implicit none
@@ -20,6 +20,8 @@ contains
                  new_unittest("Diagonalization of Hermitian matrices (2x2)", test_diagonalization_herm_22), &
                  new_unittest("Diagonalization of symmetric matrices (random)", test_diagonalization_sym_rand), &
                  new_unittest("Diagonalization of Hermitian matrices (random)", test_diagonalization_herm_rand), &
+                 new_unittest("Inverse of real matrices (random)", test_inv_re_rand), &
+                 new_unittest("Inverse of complex matrices (random)", test_inv_c_rand), &
                  new_unittest("Initialization of system and return basic properties from input.", create_crystal_from_input), &
                  new_unittest("Initialization of system and return basic properties from file.", create_crystal_from_file)]
 
@@ -145,6 +147,99 @@ contains
     deallocate (mat, P, D)
 
   end subroutine test_diagonalization_sym_rand
+
+  subroutine test_inv_re_rand(error)
+    type(error_type), allocatable, intent(out) :: error
+
+    real(wp), allocatable :: mat(:, :), prod(:, :)
+    real(wp) :: szr
+    real(wp) :: offdiag
+    integer :: sz, n, m
+
+    call random_seed()
+    call random_number(szr)
+
+    sz = nint(50.0_wp*szr) + 5
+
+    allocate (mat(sz, sz), prod(sz, sz))
+
+    call random_number(mat)
+    mat = 10.0_wp*(mat - 0.5_wp)
+
+    !Since strictly diagonally dominant matrices are invertible,
+    !(see https://en.wikipedia.org/wiki/Diagonally_dominant_matrix),
+    !create a random diagonally dominant matrix.
+    do n = 1, sz
+      offdiag = 0.0_wp
+      do m = 1, sz
+        if (n == m) cycle
+        offdiag = offdiag + abs(mat(n, m))
+      enddo
+      mat(n, n) = offdiag + 1.0_wp
+    enddo
+
+    prod = matmul(mat, inverse(mat))
+
+    do n = 1, sz
+      if (abs(prod(n, n) - 1.0_wp) > tol*epsilon(1.0_wp)) then
+        allocate (error)
+        return
+      endif
+    enddo
+
+    deallocate (mat, prod)
+
+  end subroutine test_inv_re_rand
+
+  subroutine test_inv_c_rand(error)
+    type(error_type), allocatable, intent(out) :: error
+
+    complex(wp), allocatable :: mat(:, :), prod(:, :)
+    real(wp) :: szr, entryr, entryc
+    real(wp) :: offdiag
+    integer :: sz, n, m
+
+    call random_seed()
+    call random_number(szr)
+
+    sz = nint(50.0_wp*szr) + 5
+
+    allocate (mat(sz, sz), prod(sz, sz))
+
+    do n = 1, sz
+      do m = 1, sz
+        call random_number(entryr)
+        call random_number(entryc)
+        entryr = 10.0_wp*(entryr - 0.5_wp)
+        entryc = 10.0_wp*(entryc - 0.5_wp)
+        mat(n, m) = cmplx(entryr, entryc, wp)
+      enddo
+    enddo
+
+    !Since strictly diagonally dominant matrices are invertible,
+    !(see https://en.wikipedia.org/wiki/Diagonally_dominant_matrix),
+    !create a random diagonally dominant matrix.
+    do n = 1, sz
+      offdiag = 0.0_wp
+      do m = 1, sz
+        if (n == m) cycle
+        offdiag = offdiag + abs(mat(n, m))
+      enddo
+      mat(n, n) = cmplx(offdiag + 1.0_wp, 0.0_wp, wp)
+    enddo
+
+    prod = matmul(mat, inverse(mat))
+
+    do n = 1, sz
+      if (abs(prod(n, n) - 1.0_wp) > tol*epsilon(1.0_wp)) then
+        allocate (error)
+        return
+      endif
+    enddo
+
+    deallocate (mat, prod)
+
+  end subroutine test_inv_c_rand
 
   subroutine test_diagonalization_herm_rand(error)
     type(error_type), allocatable, intent(out) :: error

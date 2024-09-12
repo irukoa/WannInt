@@ -119,7 +119,6 @@ contains
     call random_number(nr)
 
     n = nint(2.0_wp + 28.0_wp*nr)
-    n = 30
 
     allocate (rnd1(n, n), rnd2(n, n), eig(n), m(n, n), res(n, n), p(n, n))
 

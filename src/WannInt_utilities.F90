@@ -9,10 +9,16 @@ module WannInt_utilities
   private
 
   public :: diagonalize
+  public :: inverse
 
   interface diagonalize
     module procedure :: diagonalize_symmetric
     module procedure :: diagonalize_hermitian
+  end interface
+
+  interface inverse
+    module procedure :: inverse_real
+    module procedure :: inverse_complex
   end interface
 
   public :: dirac_delta
@@ -394,5 +400,82 @@ contains
     logu = matmul(Z, matmul(S, conjg(transpose(Z))))
 
   end function logu
+
+  function inverse_real(matrix) result(inv_r)
+    !=========================================!
+    !                                         !
+    !  Given a general real matrix,           !
+    !  try to compute its inverse.            !
+    !                                         !
+    !=========================================!
+
+    real(wp), intent(in)  :: matrix(:, :)
+    real(wp) :: inv_r(size(matrix(:, 1)), size(matrix(1, :)))
+
+    complex(wp) :: matrix_c(size(matrix(:, 1)), size(matrix(1, :))), &
+                   U(size(matrix(:, 1)), size(matrix(1, :))), &
+                   V(size(matrix(:, 1)), size(matrix(1, :))), &
+                   S(size(matrix(:, 1)), size(matrix(1, :)))
+
+    integer :: i
+
+    character(len=1024) :: errormsg
+
+    if (size(matrix(:, 1)) /= size(matrix(1, :))) error stop &
+      "WannInt: Error #1: matrix to invert is not square."
+
+    matrix_c = cmplx(matrix, 0.0_wp, wp)
+
+    call SVD(matrix=matrix_c, U=U, V=V, sigma=S)
+
+    do i = 1, size(matrix(:, 1))
+      if (abs(real(S(i, i), wp)) < 1.0E-8_wp) then
+        write (errormsg, "(i20)") i
+        errormsg = "WannInt: Error #2: the eigenvalue #"//trim(adjustl(errormsg))//" is 0, cannot invert."
+        error stop trim(errormsg)
+      endif
+      S(i, i) = cmplx(1.0_wp/real(S(i, i), wp), 0.0_wp, wp)
+    enddo
+
+    inv_r = real(matmul(matmul(V, S), conjg(transpose(U))), wp)
+
+  end function inverse_real
+
+  function inverse_complex(matrix) result(inv_c)
+    !=========================================!
+    !                                         !
+    !  Given a general real matrix,           !
+    !  try to compute its inverse.            !
+    !                                         !
+    !=========================================!
+
+    complex(wp), intent(in)  :: matrix(:, :)
+    complex(wp) :: inv_c(size(matrix(:, 1)), size(matrix(1, :)))
+
+    complex(wp) :: U(size(matrix(:, 1)), size(matrix(1, :))), &
+                   V(size(matrix(:, 1)), size(matrix(1, :))), &
+                   S(size(matrix(:, 1)), size(matrix(1, :)))
+
+    integer :: i
+
+    character(len=1024) :: errormsg
+
+    if (size(matrix(:, 1)) /= size(matrix(1, :))) error stop &
+      "WannInt: Error #1: matrix to invert is not square."
+
+    call SVD(matrix=matrix, U=U, V=V, sigma=S)
+
+    do i = 1, size(matrix(:, 1))
+      if (abs(real(S(i, i), wp)) < 1.0E-8_wp) then
+        write (errormsg, "(i20)") i
+        errormsg = "WannInt: Error #2: the eigenvalue #"//trim(adjustl(errormsg))//" is 0, cannot invert."
+        error stop trim(errormsg)
+      endif
+      S(i, i) = cmplx(1.0_wp/real(S(i, i), wp), 0.0_wp, wp)
+    enddo
+
+    inv_c = matmul(matmul(V, S), conjg(transpose(U)))
+
+  end function inverse_complex
 
 end module WannInt_utilities

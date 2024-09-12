@@ -5,7 +5,7 @@ module WannInt
 
   use WannInt_kinds, only: wp => dp
   use WannInt_definitions, only: cmplx_0, cmplx_i, pi
-  use WannInt_utilities, only: diagonalize, dirac_delta, &
+  use WannInt_utilities, only: diagonalize, inverse, dirac_delta, &
     deg_list, schur, &
     SVD, expsh, logu
   use MAC, only: container_specifier, container
@@ -15,6 +15,7 @@ module WannInt
   private
 
   public :: diagonalize
+  public :: inverse
   public :: dirac_delta
   public :: deg_list
   public :: schur

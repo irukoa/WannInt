@@ -296,6 +296,16 @@ where
 - `real/complex(dp), optional, intent(out) :: D(n, n)` is the diagonal form $D$ of `matrix`.
 - `real(dp), optional, intent(out) :: eig(n)` are the eigenvalues of `matrix`.
 
+## Matrix inverse utility
+
+The library includes a utility to invert matrices by employing singular value decomposition. It can be called by
+```fortran
+inv = inverse(matrix)
+```
+where
+- `real/complex(dp), intent(in)  :: matrix(n, n)` is an invertible square matrix $A$.
+- `real/complex(dp) :: inv(n, n)` is an invertible square matrix $B$ obeying $AB=I$.
+
 ## Schur decomposition utility
 
 The library includes a wrapper of `zgees` routine from LAPACK. It can be called by

@@ -6,7 +6,7 @@ program main
 
   implicit none
 
-  character(len=10) :: ver = "1.0.0"
+  character(len=10) :: ver = "1.0.1"
 
   write (unit=output_unit, fmt="(A)") ""
   write (unit=output_unit, fmt="(A)") " ____    __    ____  ___      .__   __. .__   __.  __  .__   __. .___________. "

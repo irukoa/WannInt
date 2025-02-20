@@ -312,7 +312,6 @@ contains
 
     !Initialization.
     B = matrix
-    sigma = 0.d0
 
     !Query optimal workspace.
     lwork = -1
